@@ -1,14 +1,21 @@
 import React from "react";
-import { useHelloQuery } from "./__generated__/graphql";
+
+import { Route, Routes } from "react-router-dom";
+import Register from "./components/Register";
+import { Login } from "./components/Login";
+import Hello from "./components/Hello";
+import Users from "./components/Users";
 
 function App() {
-  const { loading, data } = useHelloQuery();
   return (
     <div>
-      <h1>{loading ? "Loading..." : data?.helloWorld}</h1>
-      <h1>Hello Something</h1>
+      <Routes>
+        <Route path="/register" element={<Register />} />
 
-      <h1>Hello Something</h1>
+        <Route path="/login" element={<Login />} />
+        <Route path="/hello" element={<Hello />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
     </div>
   );
 }

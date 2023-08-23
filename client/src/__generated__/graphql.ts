@@ -85,7 +85,7 @@ export type HelloQuery = { __typename?: 'Query', helloWorld: string };
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: Array<{ __typename?: 'User', email: string, firstName: string, lastName: string, name: string }> };
+export type UserQuery = { __typename?: 'Query', user: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, name: string }> };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -199,6 +199,7 @@ export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariable
 export const UserDocument = gql`
     query User {
   user {
+    id
     email
     firstName
     lastName
