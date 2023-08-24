@@ -12,7 +12,10 @@ export class IsEmailAlreadyExistConstraint
 {
   validate(email: string) {
     return User.findOne({ where: { email } }).then((user) => {
-      if (user) return false;
+      if (user) {
+        throw new Error("Email already exists");
+      }
+
       return true;
     });
   }

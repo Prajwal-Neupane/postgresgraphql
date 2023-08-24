@@ -1,8 +1,10 @@
 import React from "react";
 import { useUserQuery } from "../__generated__/graphql";
+import { Link } from "react-router-dom";
 
 const Users = () => {
   const { loading, data } = useUserQuery();
+  loading && <h1>Loading</h1>;
   return (
     <div>
       {data?.user.map((people) => {
@@ -16,6 +18,7 @@ const Users = () => {
           </div>
         );
       })}
+      <Link to={"/"}>Home</Link>
     </div>
   );
 };

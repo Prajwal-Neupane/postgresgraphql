@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRegisterMutation } from "../__generated__/graphql";
+import { Link, useNavigate } from "react-router-dom";
 
 interface DataProps {
   firstName: string;
@@ -15,9 +16,9 @@ const Register: React.FC = () => {
     password: "",
   });
   const [register, { loading, error }] = useRegisterMutation();
+  const navigate = useNavigate();
 
   loading && <h1>Loading</h1>;
-  error && console.log(error);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -27,17 +28,23 @@ const Register: React.FC = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await register({
-      variables: {
-        input: {
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          password: data.password,
+    try {
+      const response = await register({
+        variables: {
+          input: {
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            password: data.password,
+          },
         },
-      },
-    });
-    console.log(response);
+      });
+      console.log(response);
+
+      navigate("/login");
+    } catch (err) {
+      alert(error?.message);
+    }
   };
 
   return (
@@ -73,6 +80,7 @@ const Register: React.FC = () => {
         <br />
         <button type="submit">Register</button>
       </form>
+      <Link to={"/"}>Home</Link>
     </div>
   );
 };

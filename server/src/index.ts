@@ -24,6 +24,18 @@ AppDataSource.initialize()
 
 const main = async () => {
   const app = express();
+  app.use(
+    cors({
+      credentials: true,
+      origin: [
+        "http://localhost:3000",
+        "https://studio.apollographql.com",
+        "https://studio.apollographql.com/graphql",
+        "http://localhost:3001/graphql",
+        "http://localhost:3001",
+      ],
+    })
+  );
   app.use(cookieParser());
   app.use(bodyParser.json({ limit: "50mb" }));
 
@@ -53,17 +65,17 @@ const main = async () => {
       resolvers: [RegisterResolver, LoginResolver],
       validate: false,
     }),
-    formatError: (error: GraphQLError) => {
-      if (error.originalError instanceof ArgumentValidationError) {
-        return error;
-      }
-      return {
-        message: error.message,
-        locations: error.locations,
-        path: error.path,
-        extensions: error.extensions,
-      };
-    },
+    // // formatError: (error: GraphQLError) => {
+    // //   if (error.originalError instanceof ArgumentValidationError) {
+    // //     return error;
+    // //   }
+    //   return {
+    //     message: error.message,
+    //     locations: error.locations,
+    //     path: error.path,
+    //     extensions: error.extensions,
+    //   };
+    // },
     context: ({ req, res }) => ({ req, res }),
   });
   // const PgSqlStore = genFunc(session);
@@ -85,18 +97,6 @@ const main = async () => {
   //   } as any)
   // );
 
-  app.use(
-    cors({
-      credentials: true,
-      origin: [
-        "http://localhost:3000",
-        "https://studio.apollographql.com",
-        "https://studio.apollographql.com/graphql",
-        "http://localhost:3001/graphql",
-        "http://localhost:3001",
-      ],
-    })
-  );
   // app.use((req, res, next) => {
   //   res.header(
   //     "Access-Control-Allow-Origin",
@@ -110,7 +110,7 @@ const main = async () => {
 
   await apolloServer.start();
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(3001, () => {
     console.log(`Server started on port ${3001}/graphql`);
